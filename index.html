@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards</title>
+  <style>
+    /* Resetando estilos padrões */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #8e44ad;  /* Cor de fundo roxa vibrante */
+      color: #fff;
+      padding: 20px;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 80vh;
+    }
+
+    h1 {
+      color: #ecf0f1;
+      font-size: 2.5em;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    #container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Aumentando o tamanho dos cards */
+      gap: 30px; /* Aumentando o espaço entre os cards */
+      width: 80%;
+      margin-bottom: 40px;
+    }
+
+    .cartao {
+      background-color: #34495e;  /* Cor mais escura para os cards */
+      border-radius: 15px; /* Deixando as bordas mais arredondadas */
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .cartao:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .cartao__conteudo {
+      padding: 30px; /* Aumentando o espaço interno dos cards */
+      color: #fff;
+      background-color: #34495e;
+      border-radius: 12px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cartao__conteudo:hover {
+      background-color: #1abc9c; /* Mudando a cor de fundo ao passar o mouse */
+    }
+
+    .cartao__conteudo h3 {
+      font-size: 1.8em;
+      margin-bottom: 12px;
+      font-weight: bold;
+      color: #ecf0f1;
+      background-color: #16a085;
+      padding: 5px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .cartao__conteudo__pergunta {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #16a085;
+      background-color: #f4f6f7;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .cartao__conteudo__resposta {
+      display: none;
+      font-size: 1.2em;
+      color: #2c3e50; /* Cor de texto mais escura para destacar */
+      background-color: #ecf0f1; /* Cor de fundo mais clara para a resposta */
+      padding: 15px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.5s ease, display 0.5s ease;
+      white-space: pre-wrap; /* Permite que o texto quebre em várias linhas */
+    }
+
+    .cartao__conteudo__resposta.mostrar {
+      display: block;
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 1.3em;
+      color: #2c3e50;
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    footer p {
+      font-style: italic;
+    }
+
+    footer strong {
+      color: #16a085;
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Flashcards de Estudo</h1>
+    <section id="container">
+      <!-- Flashcards serão gerados aqui -->
+    </section>
+  </main>
+  <footer>
+    <p>Projeto desenvolvido por <strong>Carlos Henrique</strong>, sem fins lucrativos.</p>
+  </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const perguntas = [
+        {
+          categoria: "Programação",
+          pergunta: "O que é JavaScript?",
+          resposta: "O JavaScript é uma linguagem de programação usada para criar sites interativos. Ele é amplamente utilizado para adicionar funcionalidades dinâmicas a páginas web, como animações, formulários interativos e chamadas assíncronas para servidores, tornando os sites mais interativos e dinâmicos."
+        },
+        {
+          categoria: "Matemática",
+          pergunta: "Qual é a fórmula da área de um triângulo?",
+          resposta: "A fórmula da área de um triângulo é A = (base * altura) / 2. Essa fórmula é derivada da noção de que qualquer triângulo pode ser visto como metade de um retângulo. A base é a largura do triângulo e a altura é a distância perpendicular da base ao vértice oposto."
+        },
+        {
+          categoria: "Geografia",
+          pergunta: "Qual é a capital da França?",
+          resposta: "A capital da França é Paris, uma das cidades mais icônicas e culturais do mundo. Paris é conhecida por seus monumentos históricos, como a Torre Eiffel, o Museu do Louvre e a Catedral de Notre-Dame. Além disso, é um importante centro de arte, moda e gastronomia."
+        },
+        {
+          categoria: "História",
+          pergunta: "Quem foi o primeiro presidente do Brasil?",
+          resposta: "O primeiro presidente do Brasil foi Marechal Deodoro da Fonseca, que assumiu a presidência após liderar um golpe militar que depôs o imperador Dom Pedro II, proclamando a República do Brasil em 1889. Deodoro foi um dos líderes militares mais importantes da história do país."
+        },
+        {
+          categoria: "Ciência",
+          pergunta: "O que é a teoria da relatividade?",
+          resposta: "A teoria da relatividade é uma teoria física proposta por Albert Einstein, que descreve a gravitação e a relação entre espaço e tempo. Ela é dividida em duas partes: a relatividade especial, que trata do movimento em altas velocidades, e a relatividade geral, que aborda a gravitação e a curvatura do espaço-tempo."
+        },
+        {
+          categoria: "Arte",
+          pergunta: "Quem pintou a Mona Lisa?",
+          resposta: "A Mona Lisa foi pintada por Leonardo da Vinci, um dos maiores gênios da história. A pintura é famosa por sua técnica e pelo misterioso sorriso da personagem, que intriga os estudiosos até hoje. Ela está exposta no Museu do Louvre, em Paris, e é uma das obras mais valiosas e reconhecidas do mundo."
+        },
+        {
+          categoria: "Esportes",
+          pergunta: "Quem ganhou a Copa do Mundo de 2014?",
+          resposta: "A Alemanha ganhou a Copa do Mundo de 2014, realizada no Brasil, após vencer a Argentina por 1 a 0 na final. A vitória foi marcada por um gol de Mario Götze, no segundo tempo da prorrogação. Foi o quarto título mundial conquistado pela seleção alemã."
+        },
+        {
+          categoria: "Tecnologia",
+          pergunta: "O que é inteligência artificial?",
+          resposta: "Inteligência Artificial (IA) é um campo da ciência da computação que se concentra em criar sistemas que podem realizar tarefas normalmente requerendo inteligência humana, como reconhecimento de fala, visão computacional, e tomada de decisões. A IA está sendo aplicada em diversas áreas, como saúde, transporte, finanças e até entretenimento."
+        },
+        {
+          categoria: "Física",
+          pergunta: "O que é a Lei da Gravitação Universal?",
+          resposta: "A Lei da Gravitação Universal foi formulada por Isaac Newton e afirma que todos os corpos no universo se atraem mutuamente com uma força que é diretamente proporcional às suas massas e inversamente proporcional ao quadrado da distância entre eles. Essa lei é fundamental para entender o movimento dos planetas e outros corpos celestes."
+        },
+        {
+          categoria: "Física Quântica",
+          pergunta: "O que é o entrelaçamento quântico?",
+          resposta: "O entrelaçamento quântico é um fenômeno em que duas partículas se tornam tão fortemente correlacionadas que o estado de uma delas pode influenciar instantaneamente o estado da outra, não importa a distância que as separa. Esse fenômeno desafia nossa compreensão da física clássica e tem implicações profundas para a computação quântica."
+        },
+        {
+          categoria: "Astronomia",
+          pergunta: "O que acontece se você viajar mais rápido do que a luz?",
+          resposta: "De acordo com a teoria da relatividade de Einstein, nada pode viajar mais rápido que a luz no vácuo. Se algo ultrapassasse a velocidade da luz, isso violaria as leis da física como as conhecemos, o que poderia resultar em paradoxos, como viagens no tempo. Esse é um dos maiores mistérios da física moderna."
+        },
+        {
+          categoria: "História Alternativa",
+          pergunta: "E se a Antiga Roma nunca tivesse caído?",
+          resposta: "Se o Império Romano nunca tivesse caído, o mundo moderno poderia ser bem diferente. A tecnologia, a cultura e as ideias políticas poderiam ter se desenvolvido de uma maneira completamente distinta. O cristianismo, por exemplo, poderia não ter se espalhado da mesma forma, e a história das nações europeias teria uma linha do tempo completamente alterada."
+        }
+      ];
+
+      const container = document.getElementById('container');
+
+      perguntas.forEach(item => {
+        const cartao = document.createElement('div');
+        cartao.classList.add('cartao');
+
+        const conteudo = document.createElement('div');
+        conteudo.classList.add('cartao__conteudo');
+        
+        const titulo = document.createElement('h3');
+        titulo.textContent = item.categoria;
+
+        const perguntaDiv = document.createElement('div');
+        perguntaDiv.classList.add('cartao__conteudo__pergunta');
+        perguntaDiv.innerHTML = `<p>${item.pergunta}</p>`;
+
+        const respostaDiv = document.createElement('div');
+        respostaDiv.classList.add('cartao__conteudo__resposta');
+        respostaDiv.innerHTML = `<p>${item.resposta}</p>`;
+
+        conteudo.appendChild(titulo);
+        conteudo.appendChild(perguntaDiv);
+        conteudo.appendChild(respostaDiv);
+        cartao.appendChild(conteudo);
+        container.appendChild(cartao);
+
+        cartao.addEventListener('click', () => {
+          const resposta = cartao.querySelector('.cartao__conteudo__resposta');
+          resposta.classList.toggle('mostrar');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
